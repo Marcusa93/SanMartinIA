@@ -25,21 +25,25 @@ export default function Player360Viewer({ modelUrl, className, label = "Vista 36
 
     if (isVideo && modelUrl) {
         return (
-            <div className={cn("w-full h-[500px] bg-transparent rounded-xl overflow-hidden relative group flex items-center justify-center", className)}>
-                {/* 
-                  Video Optimization:
-                  1. scale-150: Zooms in to crop black bars and 'Veo' logo
-                  2. mix-blend-multiply: Makes white background transparent
-                  3. brightness/contrast: Compensates for multiply darkening
+            <div className={cn("w-full h-[500px] rounded-xl overflow-hidden relative group flex items-center justify-center", className)}>
+                {/*
+                  Video 360 player view
+                  - Crops black sidebars and Veo watermark using scale + negative margins
+                  - mix-blend-multiply makes white background transparent
                 */}
-                <video
-                    src={modelUrl}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover scale-150 mix-blend-multiply brightness-110 contrast-125 opacity-90 transition-all duration-500"
-                />
+                <div className="relative h-full w-full flex items-center justify-center overflow-hidden">
+                    <video
+                        src={modelUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="h-[130%] object-contain mix-blend-multiply"
+                        style={{
+                            clipPath: 'inset(8% 15% 12% 15%)', // top right bottom left - crops bars and Veo logo
+                        }}
+                    />
+                </div>
 
                 {/* Floating label */}
                 <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm border border-slate-100 text-primary uppercase tracking-wider z-10">

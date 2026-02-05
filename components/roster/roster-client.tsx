@@ -92,8 +92,8 @@ export function RosterClient({ role }: RosterClientProps) {
               onClick={() => setPositionFilter(chip.value)}
               className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                 active
-                  ? 'bg-red-700 text-white border-red-700'
-                  : 'bg-slate-800 text-slate-400 border-slate-700/50 hover:border-slate-500 hover:text-slate-200'
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'bg-secondary text-secondary-foreground border-border hover:border-primary/50 hover:text-foreground'
               }`}
             >
               <span>{chip.icon}</span>
@@ -118,44 +118,95 @@ export function RosterClient({ role }: RosterClientProps) {
           cta={canWrite ? { label: '+ Agregar jugador', onClick: () => { setEditPlayer(null); setModalOpen(true); } } : undefined}
         />
       ) : (
-        <Card>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-slate-700/50">
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Digital ID</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Jugador</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Posición</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {players.map((p, i) => (
-                  <tr key={p.id} className={`border-b border-slate-700/30 hover:bg-slate-800/40 transition-colors ${i % 2 === 0 ? 'bg-slate-800/20' : ''}`}>
-                    <td className="px-5 py-3">
-                      <span className="font-mono text-xs text-red-400 font-semibold tracking-wide">{p.club_player_code}</span>
-                    </td>
-                    <td className="px-5 py-3 font-medium text-slate-100">{p.first_name} {p.last_name}</td>
-                    <td className="px-5 py-3 text-slate-400">{p.position || '—'}</td>
-                    <td className="px-5 py-3">
-                      <Badge className={STATUS_COLORS[p.status]}>{STATUS_LABELS[p.status]}</Badge>
-                    </td>
-                    <td className="px-5 py-3 flex items-center gap-3">
-                      <Link href={`/players/${p.id}`} className="text-xs text-red-400 hover:text-red-300 transition-colors">Ver perfil</Link>
-                      {canWrite && (
-                        <button onClick={() => { setEditPlayer(p); setModalOpen(true); }} className="text-xs text-slate-500 hover:text-slate-300 transition-colors">Editar</button>
-                      )}
-                    </td>
+        <>
+          {/* Desktop Table */}
+          <Card className="hidden md:block">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Digital ID</th>
+                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Jugador</th>
+                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Posición</th>
+                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Estado</th>
+                    <th className="text-left px-5 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Acciones</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {players.map((p, i) => (
+                    <tr
+                      key={p.id}
+                      className={`border-b border-border/50 hover:bg-secondary/50 transition-colors ${
+                        i % 2 === 0 ? 'bg-muted/30' : 'bg-surface'
+                      }`}
+                    >
+                      <td className="px-5 py-4">
+                        <span className="font-mono text-xs text-primary font-bold tracking-wide">{p.club_player_code}</span>
+                      </td>
+                      <td className="px-5 py-4 font-semibold text-foreground">{p.first_name} {p.last_name}</td>
+                      <td className="px-5 py-4 text-secondary-foreground font-medium">{p.position || '—'}</td>
+                      <td className="px-5 py-4">
+                        <Badge className={STATUS_COLORS[p.status]}>{STATUS_LABELS[p.status]}</Badge>
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="flex items-center gap-3">
+                          <Link href={`/players/${p.id}`} className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors">
+                            Ver perfil
+                          </Link>
+                          {canWrite && (
+                            <button
+                              onClick={() => { setEditPlayer(p); setModalOpen(true); }}
+                              className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+                            >
+                              Editar
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+
+          {/* Mobile Cards */}
+          <div className="md:hidden space-y-3">
+            {players.map(p => (
+              <Card key={p.id} className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <p className="font-semibold text-foreground text-base">{p.first_name} {p.last_name}</p>
+                    <p className="font-mono text-xs text-primary font-bold mt-0.5">{p.club_player_code}</p>
+                  </div>
+                  <Badge className={STATUS_COLORS[p.status]}>{STATUS_LABELS[p.status]}</Badge>
+                </div>
+
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-secondary-foreground font-medium">{p.position || 'Sin posición'}</span>
+                  <div className="flex items-center gap-3">
+                    <Link href={`/players/${p.id}`} className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors">
+                      Ver perfil
+                    </Link>
+                    {canWrite && (
+                      <button
+                        onClick={() => { setEditPlayer(p); setModalOpen(true); }}
+                        className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        Editar
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </Card>
+            ))}
           </div>
-        </Card>
+        </>
       )}
 
-      <p className="text-xs text-slate-600 mt-3">{players.length} jugador{players.length !== 1 ? 'es' : ''} encontrado{players.length !== 1 ? 's' : ''}</p>
+      <p className="text-sm text-muted-foreground mt-4 font-medium">
+        {players.length} jugador{players.length !== 1 ? 'es' : ''} encontrado{players.length !== 1 ? 's' : ''}
+      </p>
 
       <PlayerModal
         open={modalOpen}

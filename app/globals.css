@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* ─── Light Mode (default) ──────────────────────── */
 @theme inline {
   --color-background: #f8fafc;
   --color-surface: #ffffff;
@@ -9,13 +10,13 @@
   --color-primary-foreground: #ffffff;
 
   --color-secondary: #f1f5f9;
-  --color-secondary-foreground: #0f172a;
+  --color-secondary-foreground: #475569;
 
-  --color-muted: #f8fafc;
-  --color-muted-foreground: #64748b;
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #475569;
 
-  --color-accent: #f1f5f9;
-  --color-accent-foreground: #0f172a;
+  --color-accent: #fee2e2;
+  --color-accent-foreground: #991b1b;
 
   --color-destructive: #ef4444;
   --color-destructive-foreground: #f8fafc;
@@ -23,6 +24,9 @@
   --color-border: #e2e8f0;
   --color-input: #e2e8f0;
   --color-ring: #D00000;
+
+  --color-table-row-alt: #f8fafc;
+  --color-table-hover: #f1f5f9;
 
   --radius-lg: 0.75rem;
   --radius-md: 0.5rem;
@@ -32,9 +36,39 @@
   --animate-accordion-up: accordion-up 0.2s ease-out;
 }
 
+/* ─── Dark Mode ──────────────────────── */
+.dark {
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-foreground: #f1f5f9;
+
+  --color-primary: #ef4444;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #334155;
+  --color-secondary-foreground: #e2e8f0;
+
+  --color-muted: #334155;
+  --color-muted-foreground: #94a3b8;
+
+  --color-accent: #7f1d1d;
+  --color-accent-foreground: #fecaca;
+
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #fef2f2;
+
+  --color-border: #334155;
+  --color-input: #334155;
+  --color-ring: #ef4444;
+
+  --color-table-row-alt: #1e293b;
+  --color-table-hover: #334155;
+}
+
 /* ─── Custom scrollbar ──────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -50,6 +84,14 @@
   background-color: #64748b;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #64748b;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
 /* ─── Focus-visible for keyboard nav ─────────────────────── */
 :focus-visible {
   outline: 2px solid var(--color-primary);
@@ -59,6 +101,7 @@
 body {
   background: var(--color-background);
   color: var(--color-foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ─── Markdown-style content in chat messages ────────────── */
@@ -66,18 +109,18 @@ body {
   font-weight: 600;
   font-size: 0.95rem;
   margin-bottom: 4px;
-  color: #e2e8f0;
+  color: var(--color-foreground);
 }
 
 .chat-content p {
   margin-bottom: 4px;
-  color: #cbd5e1;
+  color: var(--color-muted-foreground);
 }
 
 .chat-content ul {
   list-style: disc;
   padding-left: 18px;
-  color: #cbd5e1;
+  color: var(--color-muted-foreground);
 }
 
 .chat-content li {
@@ -85,5 +128,48 @@ body {
 }
 
 .chat-content strong {
-  color: #e2e8f0;
+  color: var(--color-foreground);
+}
+
+/* ─── Table responsive utilities ────────────── */
+@media (max-width: 768px) {
+  .table-responsive {
+    display: block;
+    width: 100%;
+  }
+
+  .table-responsive thead {
+    display: none;
+  }
+
+  .table-responsive tbody {
+    display: block;
+  }
+
+  .table-responsive tr {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.75rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  .table-responsive td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border: none !important;
+  }
+
+  .table-responsive td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--color-muted-foreground);
+    margin-right: 1rem;
+  }
 }

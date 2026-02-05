@@ -29,19 +29,23 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
+  // Check for mock_session cookie first — allows demo mode without Supabase auth
+  const isMockMode = request.cookies.has('mock_session');
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   // Redirect unauthenticated users away from protected routes
+  // Skip redirect if in mock mode
   const url = request.nextUrl.clone();
-  if (!user && !url.pathname.startsWith('/login') && !url.pathname.startsWith('/api')) {
+  if (!user && !isMockMode && !url.pathname.startsWith('/login') && !url.pathname.startsWith('/api')) {
     url.pathname = '/login';
     return NextResponse.redirect(url);
   }
 
-  // If authenticated but no path, go to dashboard
-  if (user && url.pathname === '/') {
+  // If authenticated (or mock mode) but no path, go to dashboard
+  if ((user || isMockMode) && url.pathname === '/') {
     url.pathname = '/dashboard';
     return NextResponse.redirect(url);
   }

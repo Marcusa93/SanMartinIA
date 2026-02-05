@@ -3,7 +3,14 @@ import { updateSession } from './lib/auth/middleware';
 
 export const config = {
   matcher: [
-    '/((?!_next/image|_next/static|favicon.ico|sitemap.xml|robots.txt).*)',
+    /*
+     * Match all request paths except for:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+     * - public folder files (images, videos, etc.)
+     */
+    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|webm|mp4|ico|glb|gltf)$).*)',
   ],
 };
 
