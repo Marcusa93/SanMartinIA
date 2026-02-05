@@ -45,7 +45,7 @@ export function DashboardCharts({ stats, itemVariant }: DashboardChartsProps) {
                 <motion.div variants={itemVariant}>
                     <Player360Viewer
                         modelUrl="/Lucas_Diarte_360_alpha_v2.webm"
-                        className="h-[300px] md:h-full min-h-[300px] bg-gradient-to-br from-secondary/50 to-muted/50"
+                        className="h-[300px] md:h-full min-h-[300px]"
                         label="Jugador Destacado"
                     />
                 </motion.div>
