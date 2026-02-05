@@ -27,8 +27,8 @@ export default function Player360Viewer({ modelUrl, className, label = "Vista 36
         return (
             <div
                 className={cn(
-                    "w-full h-[500px] rounded-xl overflow-hidden relative group flex items-center justify-center",
-                    "bg-secondary/50",
+                    "w-full h-[400px] rounded-2xl overflow-hidden relative group flex items-center justify-center",
+                    "bg-gradient-to-br from-secondary/30 to-secondary/60",
                     className
                 )}
             >
@@ -54,7 +54,7 @@ export default function Player360Viewer({ modelUrl, className, label = "Vista 36
     }
 
     return (
-        <div className={cn("w-full h-[500px] bg-surface rounded-xl overflow-hidden shadow-inner relative border border-border", className)}>
+        <div className={cn("w-full h-[400px] bg-surface rounded-2xl overflow-hidden shadow-inner relative border border-border", className)}>
             <Canvas shadows dpr={[1, 2]} camera={{ fov: 50 }}>
                 <Suspense fallback={<Html center><span className="loading loading-spinner text-primary font-semibold tracking-wide">Cargando 3D...</span></Html>}>
                     {/* Stage configura luces y entorno automáticamente para que se vea profesional */}

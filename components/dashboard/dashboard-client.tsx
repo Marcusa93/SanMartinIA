@@ -214,7 +214,11 @@ export function DashboardClient() {
         {/* 3D Player Viewer Demo */}
         <motion.div variants={item}>
           <div className="h-full">
-            <Player360Viewer modelUrl="/Lucas_Diarte_360_alpha_v2.webm" />
+            <Player360Viewer
+              modelUrl="/Lucas_Diarte_360_alpha_v2.webm"
+              className="h-[300px] md:h-[350px]"
+              label="Jugador Destacado"
+            />
           </div>
         </motion.div>
       </div>

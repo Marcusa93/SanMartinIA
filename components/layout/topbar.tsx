@@ -61,7 +61,7 @@ export function Topbar({ userName, role, onMenuClick }: TopbarProps) {
             <span className="block text-sm text-foreground font-semibold leading-none group-hover:text-primary transition-colors">{userName}</span>
             <span className="text-[10px] text-muted-foreground font-medium">Online</span>
           </div>
-          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-gray-100 to-gray-50 dark:from-slate-700 dark:to-slate-600 border border-white dark:border-slate-600 shadow-sm ring-1 ring-black/5 dark:ring-white/5 flex items-center justify-center overflow-hidden">
+          <div className="w-9 h-9 rounded-full bg-secondary border border-border shadow-sm flex items-center justify-center overflow-hidden">
             <span className="text-foreground/70 text-xs font-bold group-hover:text-primary transition-colors">
               {userName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
             </span>
