@@ -28,22 +28,22 @@ export default function Player360Viewer({ modelUrl, className, label = "Vista 36
             <div
                 className={cn(
                     "w-full h-[400px] rounded-2xl overflow-hidden relative group flex items-center justify-center",
-                    "bg-gradient-to-br from-secondary/30 to-secondary/60",
+                    "player-360-container",
                     className
                 )}
             >
-                {/* Video with blend mode to make white background transparent in light mode */}
-                <video
-                    src={modelUrl}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="h-full w-auto max-w-none object-contain player-360-video"
-                    style={{
-                        clipPath: 'inset(8% 0 8% 0)', // Crop top and bottom bars
-                    }}
-                />
+                {/* Video container with white background for blend-mode compatibility */}
+                <div className="player-360-video-wrapper">
+                    <video
+                        src={`${modelUrl}?v=2`}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        preload="auto"
+                        className="player-360-video"
+                    />
+                </div>
 
                 {/* Floating label with theme-aware styling */}
                 <div className="absolute bottom-4 left-4 bg-surface/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm border border-border text-primary uppercase tracking-wider z-10">
