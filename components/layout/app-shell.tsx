@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Sidebar } from './sidebar';
 import { Topbar } from './topbar';
 import { SantitoChatbot } from '../assistant/santito-chatbot';
@@ -11,15 +12,41 @@ interface AppShellProps {
 }
 
 export function AppShell({ userName, role, children }: AppShellProps) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="flex min-h-screen bg-background text-foreground">
-      <Sidebar role={role} />
+      {/* Desktop sidebar - always visible on md+ */}
+      <div className="hidden md:block">
+        <Sidebar role={role} />
+      </div>
+
+      {/* Mobile sidebar - overlay */}
+      {sidebarOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+          {/* Sidebar drawer */}
+          <div className="fixed inset-y-0 left-0 z-50 md:hidden animate-in slide-in-from-left duration-300">
+            <Sidebar role={role} onClose={() => setSidebarOpen(false)} />
+          </div>
+        </>
+      )}
+
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Topbar userName={userName} role={role} />
-        <main className="flex-1 overflow-y-auto p-6 scroll-smooth">
+        <Topbar
+          userName={userName}
+          role={role}
+          onMenuClick={() => setSidebarOpen(prev => !prev)}
+        />
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth">
           {children}
         </main>
       </div>
+
       <SantitoChatbot />
     </div>
   );

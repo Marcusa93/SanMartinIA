@@ -102,7 +102,7 @@ export function SantitoChatbot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3">
 
       {/* ── Expanded panel ── */}
       <AnimatePresence>
@@ -113,7 +113,7 @@ export function SantitoChatbot() {
             animate="visible"
             exit="exit"
             style={{ transformOrigin: 'bottom right' }}
-            className="w-[380px] h-[520px] bg-slate-900 border border-slate-700/50 rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden"
+            className="w-[calc(100vw-2rem)] sm:w-[380px] h-[70vh] sm:h-[520px] max-h-[600px] bg-slate-900 border border-slate-700/50 rounded-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/40 shrink-0">
@@ -171,7 +171,7 @@ export function SantitoChatbot() {
             {/* Suggestions (only when conversation is short) */}
             {messages.length <= 2 && (
               <div className="px-3 pb-2 flex flex-wrap gap-1.5">
-                {SUGGESTIONS.map(s => (
+                {SUGGESTIONS.slice(0, 2).map(s => (
                   <button
                     key={s}
                     onClick={() => send(s)}
@@ -192,7 +192,7 @@ export function SantitoChatbot() {
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send(input)}
                   placeholder="Preguntá algo…"
-                  className="flex-1 rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                  className="flex-1 rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
                 />
                 <Button onClick={() => send(input)} isLoading={loading} size="sm" className="shrink-0">Enviar</Button>
               </div>
@@ -201,20 +201,26 @@ export function SantitoChatbot() {
         )}
       </AnimatePresence>
 
-      {/* ── Trigger button (always visible) ── */}
+      {/* ── Trigger button with fire flames ── */}
       <button
         onClick={() => setOpen(prev => !prev)}
-        className="relative w-14 h-14 rounded-full bg-slate-900 border-2 border-slate-700 shadow-lg shadow-black/40 hover:border-red-600 hover:shadow-red-900/30 transition-all flex items-center justify-center"
+        className="chatbot-fire-button relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-900 border-2 border-red-600/50 transition-all flex items-center justify-center"
       >
-        <div className="w-10 h-10 rounded-lg overflow-hidden bg-white flex items-center justify-center">
+        {/* Fire ember particles */}
+        <span className="fire-ember" style={{ top: '-6px', left: '8px', animationDelay: '0s' }} />
+        <span className="fire-ember" style={{ top: '-10px', right: '10px', animationDelay: '0.5s' }} />
+        <span className="fire-ember" style={{ top: '-4px', left: '50%', animationDelay: '1s' }} />
+
+        {/* Logo container */}
+        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg overflow-hidden bg-white flex items-center justify-center relative z-10">
           <img src="/logo-casm.png" alt="Santito" className="w-full h-full object-contain" />
         </div>
 
         {/* Pulse / unread indicator */}
         {hasUnread && (
-          <span className="absolute top-0.5 right-0.5 flex h-3.5 w-3.5">
-            <span className="absolute inset-0 animate-ping rounded-full bg-red-600 opacity-75" />
-            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-red-600 border-2 border-slate-950" />
+          <span className="absolute -top-1 -right-1 flex h-4 w-4">
+            <span className="absolute inset-0 animate-ping rounded-full bg-red-500 opacity-75" />
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-slate-900" />
           </span>
         )}
       </button>

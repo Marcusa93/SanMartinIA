@@ -26,24 +26,14 @@ export default function Player360Viewer({ modelUrl, className, label = "Vista 36
     if (isVideo && modelUrl) {
         return (
             <div className={cn("w-full h-[500px] rounded-xl overflow-hidden relative group flex items-center justify-center", className)}>
-                {/*
-                  Video 360 player view
-                  - Crops black sidebars and Veo watermark using scale + negative margins
-                  - mix-blend-multiply makes white background transparent
-                */}
-                <div className="relative h-full w-full flex items-center justify-center overflow-hidden">
-                    <video
-                        src={modelUrl}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="h-[130%] object-contain mix-blend-multiply"
-                        style={{
-                            clipPath: 'inset(8% 15% 12% 15%)', // top right bottom left - crops bars and Veo logo
-                        }}
-                    />
-                </div>
+                <video
+                    src={modelUrl}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="h-full w-auto max-w-none object-contain"
+                />
 
                 {/* Floating label */}
                 <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm border border-slate-100 text-primary uppercase tracking-wider z-10">
