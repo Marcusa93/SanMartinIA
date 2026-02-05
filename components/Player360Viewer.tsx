@@ -25,18 +25,28 @@ export default function Player360Viewer({ modelUrl, className, label = "Vista 36
 
     if (isVideo && modelUrl) {
         return (
-            <div className={cn("w-full h-[500px] rounded-xl overflow-hidden relative group flex items-center justify-center", className)}>
+            <div
+                className={cn(
+                    "w-full h-[500px] rounded-xl overflow-hidden relative group flex items-center justify-center",
+                    "bg-secondary/50",
+                    className
+                )}
+            >
+                {/* Video with blend mode to make white background transparent in light mode */}
                 <video
                     src={modelUrl}
                     autoPlay
                     loop
                     muted
                     playsInline
-                    className="h-full w-auto max-w-none object-contain"
+                    className="h-full w-auto max-w-none object-contain player-360-video"
+                    style={{
+                        clipPath: 'inset(8% 0 8% 0)', // Crop top and bottom bars
+                    }}
                 />
 
-                {/* Floating label */}
-                <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm border border-slate-100 text-primary uppercase tracking-wider z-10">
+                {/* Floating label with theme-aware styling */}
+                <div className="absolute bottom-4 left-4 bg-surface/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm border border-border text-primary uppercase tracking-wider z-10">
                     {label}
                 </div>
             </div>
@@ -67,7 +77,7 @@ export default function Player360Viewer({ modelUrl, className, label = "Vista 36
             </Canvas>
 
             {/* Etiqueta flotante opcional */}
-            <div className="absolute bottom-4 left-4 bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm border border-white/20 text-primary uppercase tracking-wider">
+            <div className="absolute bottom-4 left-4 bg-surface/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold shadow-sm border border-border text-primary uppercase tracking-wider">
                 {label} (Rotate on Drag)
             </div>
         </div>

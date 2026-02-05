@@ -36,33 +36,33 @@
   --animate-accordion-up: accordion-up 0.2s ease-out;
 }
 
-/* ─── Dark Mode ──────────────────────── */
-.dark {
-  --color-background: #0f172a;
-  --color-surface: #1e293b;
-  --color-foreground: #f1f5f9;
+/* ─── Dark Mode via class ──────────────────────── */
+:root.dark {
+  --color-background: #0c0a09;
+  --color-surface: #1c1917;
+  --color-foreground: #fafaf9;
 
-  --color-primary: #ef4444;
+  --color-primary: #dc2626;
   --color-primary-foreground: #ffffff;
 
-  --color-secondary: #334155;
-  --color-secondary-foreground: #e2e8f0;
+  --color-secondary: #292524;
+  --color-secondary-foreground: #e7e5e4;
 
-  --color-muted: #334155;
-  --color-muted-foreground: #94a3b8;
+  --color-muted: #292524;
+  --color-muted-foreground: #a8a29e;
 
-  --color-accent: #7f1d1d;
+  --color-accent: #450a0a;
   --color-accent-foreground: #fecaca;
 
-  --color-destructive: #dc2626;
+  --color-destructive: #b91c1c;
   --color-destructive-foreground: #fef2f2;
 
-  --color-border: #334155;
-  --color-input: #334155;
-  --color-ring: #ef4444;
+  --color-border: #44403c;
+  --color-input: #44403c;
+  --color-ring: #dc2626;
 
-  --color-table-row-alt: #1e293b;
-  --color-table-hover: #334155;
+  --color-table-row-alt: #1c1917;
+  --color-table-hover: #292524;
 }
 
 /* ─── Custom scrollbar ──────────────────────── */
@@ -84,11 +84,11 @@
   background-color: #64748b;
 }
 
-.dark ::-webkit-scrollbar-thumb {
+:root.dark ::-webkit-scrollbar-thumb {
   background-color: #64748b;
 }
 
-.dark ::-webkit-scrollbar-thumb:hover {
+:root.dark ::-webkit-scrollbar-thumb:hover {
   background-color: #94a3b8;
 }
 
@@ -102,6 +102,15 @@ body {
   background: var(--color-background);
   color: var(--color-foreground);
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─── Player 360 video adjustments ──────────────────────── */
+.player-360-video {
+  mix-blend-mode: multiply;
+}
+
+:root.dark .player-360-video {
+  mix-blend-mode: normal;
 }
 
 /* ─── Markdown-style content in chat messages ────────────── */

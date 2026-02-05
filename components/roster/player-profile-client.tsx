@@ -51,7 +51,7 @@ export function PlayerProfileClient({ playerId }: PlayerProfileClientProps) {
   }
 
   if (!player) {
-    return <div className="max-w-5xl mx-auto mt-20 text-center text-slate-500">Jugador no encontrado.</div>;
+    return <div className="max-w-5xl mx-auto mt-20 text-center text-muted-foreground">Jugador no encontrado.</div>;
   }
 
   const gpsChartData = gps.map((g: any) => ({
@@ -81,20 +81,20 @@ export function PlayerProfileClient({ playerId }: PlayerProfileClientProps) {
       <Card className="mb-6">
         <CardContent className="flex items-start justify-between gap-6">
           <div className="flex items-start gap-5">
-            <div className="w-16 h-16 rounded-xl bg-slate-700 flex items-center justify-center shrink-0">
-              <span className="text-xl font-bold text-slate-400">
+            <div className="w-16 h-16 rounded-xl bg-secondary flex items-center justify-center shrink-0">
+              <span className="text-xl font-bold text-muted-foreground">
                 {player.first_name[0]}{player.last_name[0]}
               </span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-100">{player.first_name} {player.last_name}</h1>
+              <h1 className="text-xl font-bold text-foreground">{player.first_name} {player.last_name}</h1>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
                 <Badge className={STATUS_COLORS[player.status]}>{STATUS_LABELS[player.status]}</Badge>
                 {player.position && <Badge variant="muted">{player.position}</Badge>}
-                <span className="font-mono text-xs text-red-400 font-semibold bg-slate-800 px-2 py-0.5 rounded">{player.club_player_code}</span>
+                <span className="font-mono text-xs text-primary font-semibold bg-secondary px-2 py-0.5 rounded">{player.club_player_code}</span>
               </div>
               {(player.height_cm || player.weight_kg || player.birthdate) && (
-                <div className="flex gap-4 mt-2 text-xs text-slate-500">
+                <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
                   {player.height_cm && <span>Altura: {player.height_cm} cm</span>}
                   {player.weight_kg && <span>Peso: {player.weight_kg} kg</span>}
                   {player.birthdate && <span>Nac: {formatDate(player.birthdate)}</span>}
@@ -105,7 +105,7 @@ export function PlayerProfileClient({ playerId }: PlayerProfileClientProps) {
           <div className="flex flex-col items-end gap-2">
             <button
               onClick={() => setShowQR(!showQR)}
-              className="text-xs text-red-400 hover:text-red-300 transition-colors border border-red-500/30 px-3 py-1 rounded-lg"
+              className="text-xs text-primary hover:text-primary/80 transition-colors border border-primary/30 px-3 py-1 rounded-lg"
             >
               {showQR ? 'Ocultar QR' : '📱 Generar QR'}
             </button>
@@ -128,10 +128,10 @@ export function PlayerProfileClient({ playerId }: PlayerProfileClientProps) {
         ].map(kpi => (
           <Card key={kpi.label}>
             <CardContent className="text-center py-4">
-              <p className="text-xs text-slate-500 mb-1">{kpi.label}</p>
-              <p className="text-2xl font-bold text-slate-100">
+              <p className="text-xs text-muted-foreground mb-1">{kpi.label}</p>
+              <p className="text-2xl font-bold text-foreground">
                 {kpi.value || '—'}
-                {kpi.unit && <span className="text-xs font-normal text-slate-500 ml-1">{kpi.unit}</span>}
+                {kpi.unit && <span className="text-xs font-normal text-muted-foreground ml-1">{kpi.unit}</span>}
               </p>
             </CardContent>
           </Card>
@@ -146,14 +146,14 @@ export function PlayerProfileClient({ playerId }: PlayerProfileClientProps) {
             {gpsChartData.length > 0 ? (
               <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={gpsChartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis dataKey="label" tick={{ fill: '#64748b', fontSize: 9 }} interval={0} angle={-30} textAnchor="end" height={50} />
-                  <YAxis tick={{ fill: '#64748b', fontSize: 10 }} domain={['dataMin - 500', 'dataMax + 500']} />
-                  <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, color: '#e2e8f0', fontSize: 12 }} />
-                  <Line type="monotone" dataKey="distancia" stroke="#D00000" strokeWidth={2} dot={{ fill: '#D00000', r: 3 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+                  <XAxis dataKey="label" tick={{ fill: 'var(--color-muted-foreground)', fontSize: 9 }} interval={0} angle={-30} textAnchor="end" height={50} />
+                  <YAxis tick={{ fill: 'var(--color-muted-foreground)', fontSize: 10 }} domain={['dataMin - 500', 'dataMax + 500']} />
+                  <Tooltip contentStyle={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-foreground)', fontSize: 12 }} />
+                  <Line type="monotone" dataKey="distancia" stroke="var(--color-primary)" strokeWidth={2} dot={{ fill: 'var(--color-primary)', r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
-            ) : <p className="text-sm text-slate-500 text-center py-8">Sin datos de GPS.</p>}
+            ) : <p className="text-sm text-muted-foreground text-center py-8">Sin datos de GPS.</p>}
           </CardContent>
         </Card>
 
@@ -163,14 +163,14 @@ export function PlayerProfileClient({ playerId }: PlayerProfileClientProps) {
             {cmjData.length > 0 ? (
               <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={cmjData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 9 }} />
-                  <YAxis tick={{ fill: '#64748b', fontSize: 10 }} domain={['dataMin - 3', 'dataMax + 3']} />
-                  <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8, color: '#e2e8f0', fontSize: 12 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+                  <XAxis dataKey="date" tick={{ fill: 'var(--color-muted-foreground)', fontSize: 9 }} />
+                  <YAxis tick={{ fill: 'var(--color-muted-foreground)', fontSize: 10 }} domain={['dataMin - 3', 'dataMax + 3']} />
+                  <Tooltip contentStyle={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-foreground)', fontSize: 12 }} />
                   <Line type="monotone" dataKey="altura" stroke="#f59e0b" strokeWidth={2} dot={{ fill: '#f59e0b', r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
-            ) : <p className="text-sm text-slate-500 text-center py-8">Sin datos de saltos.</p>}
+            ) : <p className="text-sm text-muted-foreground text-center py-8">Sin datos de saltos.</p>}
           </CardContent>
         </Card>
       </div>
