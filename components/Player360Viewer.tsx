@@ -32,8 +32,8 @@ export default function Player360Viewer({ modelUrl, className, label = "Vista 36
                     className
                 )}
             >
-                {/* Video container with white background for blend-mode compatibility */}
-                <div className="player-360-video-wrapper">
+                {/* Video container - simple and transparent */}
+                <div className="w-full h-full flex items-center justify-center">
                     <video
                         src={`${modelUrl}?v=2`}
                         autoPlay
@@ -41,7 +41,7 @@ export default function Player360Viewer({ modelUrl, className, label = "Vista 36
                         muted
                         playsInline
                         preload="auto"
-                        className="player-360-video"
+                        className="player-360-video w-full h-full object-contain"
                     />
                 </div>
 
