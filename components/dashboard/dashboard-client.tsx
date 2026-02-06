@@ -7,9 +7,10 @@ import { DashboardKpiGrid } from './DashboardKpiGrid';
 import { DashboardAlerts } from './DashboardAlerts';
 import { DashboardCharts } from './DashboardCharts';
 import { DashboardTeamSummary } from './DashboardTeamSummary';
+import { ReportDownloadButton } from './ReportDownloadButton';
 
 export function DashboardClient() {
-  const { loading, players, alerts, stats } = useDashboardData();
+  const { loading, players, alerts, stats, gps, jumps } = useDashboardData();
 
   if (loading) {
     return (
@@ -45,6 +46,17 @@ export function DashboardClient() {
       animate="show"
       className="flex flex-col gap-6"
     >
+      {/* Report Download Header */}
+      <motion.div variants={item} className="flex justify-end">
+        <ReportDownloadButton
+          players={players}
+          alerts={alerts}
+          stats={stats}
+          gpsData={gps}
+          jumpData={jumps}
+        />
+      </motion.div>
+
       <DashboardKpiGrid players={players} stats={stats} itemVariant={item} />
       <DashboardAlerts alerts={alerts} itemVariant={item} />
       <DashboardCharts stats={stats} itemVariant={item} />

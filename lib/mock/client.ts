@@ -15,6 +15,10 @@ import {
   MOCK_USERS,
 } from './data';
 
+// ── mutable tables for chat (in-memory, session-only) ─────────
+let MOCK_CHAT_THREADS: any[] = [];
+let MOCK_CHAT_MESSAGES: any[] = [];
+
 // ── table registry ────────────────────────────────────────────
 const TABLES: Record<string, any[]> = {
   players:            MOCK_PLAYERS,
@@ -23,6 +27,20 @@ const TABLES: Record<string, any[]> = {
   jump_metrics:       MOCK_JUMPS,
   strength_metrics:   MOCK_STRENGTH,
   user_profiles:      MOCK_USERS,
+  chat_threads:       MOCK_CHAT_THREADS,
+  chat_messages:      MOCK_CHAT_MESSAGES,
+};
+
+// ── mutable table refs (for insert/delete) ────────────────────
+const MUTABLE_TABLES: Record<string, { get: () => any[], set: (v: any[]) => void }> = {
+  chat_threads: {
+    get: () => MOCK_CHAT_THREADS,
+    set: (v) => { MOCK_CHAT_THREADS = v; TABLES.chat_threads = v; },
+  },
+  chat_messages: {
+    get: () => MOCK_CHAT_MESSAGES,
+    set: (v) => { MOCK_CHAT_MESSAGES = v; TABLES.chat_messages = v; },
+  },
 };
 
 // ── tiny ilike matcher ────────────────────────────────────────
@@ -42,6 +60,9 @@ class QueryBuilder {
   private _orderAsc = true;
   private _limit: number | null = null;
   private _single = false;
+  private _insertData: any = null;
+  private _updateData: any = null;
+  private _isDelete = false;
 
   constructor(table: string) {
     this._table = table;
@@ -112,14 +133,69 @@ class QueryBuilder {
   limit(n: number) { this._limit = n; return this; }
   single()         { this._single = true; return this; }
 
-  // ── write stubs (no-ops in mock) ──────────────────────────
-  insert(_data: any) { return this; }
-  update(_data: any) { return this; }
-  delete()           { return this; }
+  // ── write methods (work for mutable tables) ────────────────
+  insert(data: any) {
+    this._insertData = data;
+    return this;
+  }
+
+  update(data: any) {
+    this._updateData = data;
+    return this;
+  }
+
+  delete() {
+    this._isDelete = true;
+    return this;
+  }
 
   // ── make it thenable so  `await builder`  works ────────────
   then(resolve: (v: any) => any, reject?: (e: any) => any) {
     try {
+      const mutable = MUTABLE_TABLES[this._table];
+
+      // ── INSERT ──
+      if (this._insertData != null) {
+        const newRow = {
+          id: crypto.randomUUID(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          ...this._insertData,
+        };
+        if (mutable) {
+          const rows = mutable.get();
+          rows.push(newRow);
+          mutable.set(rows);
+        }
+        const data = this._single ? newRow : [newRow];
+        return resolve({ data, error: null });
+      }
+
+      // ── DELETE ──
+      if (this._isDelete) {
+        if (mutable) {
+          const rows = mutable.get();
+          const filtered = rows.filter(row => !this._filters.every(fn => fn(row)));
+          mutable.set(filtered);
+        }
+        return resolve({ data: null, error: null });
+      }
+
+      // ── UPDATE ──
+      if (this._updateData != null) {
+        if (mutable) {
+          const rows = mutable.get();
+          rows.forEach(row => {
+            if (this._filters.every(fn => fn(row))) {
+              Object.assign(row, this._updateData);
+            }
+          });
+          mutable.set(rows);
+        }
+        return resolve({ data: null, error: null });
+      }
+
+      // ── SELECT ──
       let result = this._rows.filter(row => this._filters.every(fn => fn(row)));
 
       if (this._orderCol) {
