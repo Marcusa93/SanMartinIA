@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Sidebar } from './sidebar';
 import { Topbar } from './topbar';
+import { MobileNav } from './mobile-nav';
 import { SantitoChatbot } from '../assistant/santito-chatbot';
 
 interface AppShellProps {
@@ -21,7 +22,7 @@ export function AppShell({ userName, role, children }: AppShellProps) {
         <Sidebar role={role} />
       </div>
 
-      {/* Mobile sidebar - overlay */}
+      {/* Mobile sidebar - overlay (drawer style) */}
       {sidebarOpen && (
         <>
           {/* Backdrop */}
@@ -42,12 +43,19 @@ export function AppShell({ userName, role, children }: AppShellProps) {
           role={role}
           onMenuClick={() => setSidebarOpen(prev => !prev)}
         />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth">
+        {/* Main content with bottom padding for mobile nav */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-24 md:pb-6 scroll-smooth">
           {children}
         </main>
       </div>
 
-      <SantitoChatbot />
+      {/* Mobile bottom navigation */}
+      <MobileNav role={role} />
+
+      {/* Santito chatbot - hidden on mobile, visible on tablet+ */}
+      <div className="hidden sm:block">
+        <SantitoChatbot />
+      </div>
     </div>
   );
 }

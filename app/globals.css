@@ -328,3 +328,87 @@ body {
   animation: ember-rise 1.8s ease-out infinite;
   pointer-events: none;
 }
+
+/* ─── Mobile Safe Area (iOS notch/home indicator) ────────────── */
+.pb-safe {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+.mb-safe {
+  margin-bottom: env(safe-area-inset-bottom);
+}
+
+/* ─── Touch-friendly interactions ────────────── */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets on mobile */
+  button,
+  a,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Disable hover states on touch devices */
+  .hover\:scale-105:hover {
+    transform: none;
+  }
+
+  /* Active state feedback */
+  button:active,
+  a:active,
+  [role="button"]:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* ─── Pull-to-refresh prevention (handled by browser) ────────────── */
+html {
+  overscroll-behavior-y: contain;
+}
+
+/* ─── Mobile card optimizations ────────────── */
+@media (max-width: 640px) {
+  /* Smaller text and padding on mobile */
+  .card-compact {
+    padding: 0.75rem;
+  }
+
+  .card-compact h3,
+  .card-compact .card-title {
+    font-size: 0.875rem;
+  }
+
+  /* Full-width buttons on mobile */
+  .btn-mobile-full {
+    width: 100%;
+  }
+
+  /* Horizontal scroll containers */
+  .scroll-x-mobile {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .scroll-x-mobile::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scroll-x-mobile > * {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+}
+
+/* ─── Bottom navigation blur enhancement ────────────── */
+@supports (backdrop-filter: blur(20px)) {
+  .mobile-nav-blur {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+}
