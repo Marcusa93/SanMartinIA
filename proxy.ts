@@ -16,9 +16,10 @@ export const config = {
 
 export default async function middleware(request: NextRequest) {
   const isMock = request.cookies.has('mock_session');
+  const url = request.nextUrl.clone();
 
+  // Si ya tiene mock_session, permitir acceso
   if (isMock) {
-    const url = request.nextUrl.clone();
     // / or /login while in mock → go to dashboard
     if (url.pathname === '/' || url.pathname === '/login') {
       url.pathname = '/dashboard';
@@ -28,6 +29,24 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // real auth flow
+  // DEMO AUTOMÁTICO EN PRODUCCIÓN
+  // Cualquier persona que acceda a / o /login recibe mock_session automáticamente
+  const isProduction = process.env.NODE_ENV === 'production' || process.env.APP_ENV === 'production';
+  const isRootOrLogin = url.pathname === '/' || url.pathname === '/login';
+
+  if (isProduction && isRootOrLogin) {
+    // Establecer cookie y redirigir a dashboard
+    url.pathname = '/dashboard';
+    const response = NextResponse.redirect(url);
+    response.cookies.set('mock_session', '1', {
+      path: '/',
+      httpOnly: false,
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 días
+    });
+    return response;
+  }
+
+  // Flujo normal de autenticación (desarrollo o rutas protegidas)
   return updateSession(request);
 }
