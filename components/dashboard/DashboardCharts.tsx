@@ -21,7 +21,7 @@ export function DashboardCharts({ stats, itemVariant }: DashboardChartsProps) {
                         <CardHeader><CardTitle>🏆 Top 5 — Distancia acumulada (14d)</CardTitle></CardHeader>
                         <CardContent>
                             {stats.top5.length > 0 ? (
-                                <ResponsiveContainer width="100%" height={220}>
+                                <ResponsiveContainer width="100%" height={300}>
                                     <BarChart data={stats.top5} layout="vertical" margin={{ left: 10, right: 20 }}>
                                         <defs>
                                             <linearGradient id="colorTotal" x1="0" y1="0" x2="1" y2="0">
@@ -45,8 +45,8 @@ export function DashboardCharts({ stats, itemVariant }: DashboardChartsProps) {
                 <motion.div variants={itemVariant}>
                     <Player360Viewer
                         modelUrl="/Lucas_Diarte_360_alpha_v2.webm"
-                        className="h-[300px] md:h-full min-h-[300px]"
-                        label="Jugador Destacado"
+                        className="h-[300px] md:h-[400px] w-full"
+                        label={stats.top5[0]?.name || "Jugador Destacado"}
                     />
                 </motion.div>
             </div>
